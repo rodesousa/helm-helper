@@ -188,8 +188,8 @@ func Command(values string) {
 	valuesStruct := readValues(values)
 	builder := new("helm upgrade --install")
 	cmd := builder.
-		setChart(valuesStruct.Metadata.Chart).
 		setName(valuesStruct.Metadata.Name).
+		setChart(valuesStruct.Metadata.Chart).
 		setVersion(valuesStruct.Metadata.Version).
 		setNamespace(valuesStruct.Metadata.Namespace).
 		setValues(values).
