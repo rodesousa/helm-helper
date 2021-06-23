@@ -27,13 +27,19 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_LOGIN }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - uses: docker/build-push-action@v2
+      - id: docker_meta_old
+        name: Docker meta
+        uses: crazy-max/ghaction-docker-meta@v1
+        # compute tags:
+        # - always tag with a short commit SHA : (arkhn/image:sha-${GITHUB_SHA::7})
+        # - always tag with the branch same (replacing '/' with '-')
+        # - when a tag follows semver (eg: v1.2.3), tag with 'latest' and '1.2.3'
         with:
-          build-args: |
-            VERSION_NAME=${{ steps.docker_meta.outputs.version }}
-            VERSION_SHA=${GITHUB_SHA::8}
-          platforms: linux/amd64
-          # always push images to the hub
-          push: true
-          tags: ${{ steps.docker_meta.outputs.tags }}
-          labels: ${{ steps.docker_meta.outputs.labels }}
+          images: arkhn/pyrog-app
+          tag-sha: true
+          tag-semver: |
+            {{version}}
+      - id: run_1
+        run: echo "${{ steps.docker_meta.outputs.version }} and ${{ steps.docker_meta.outputs.tags }} and ${{ steps.docker_meta.outputs.labels }}"
+      - id: run_2
+        run: echo "${{ steps.docker_meta_old.outputs.version }} and ${{ steps.docker_meta_old.outputs.tags }} and ${{ steps.docker_meta_old.outputs.labels }}"
