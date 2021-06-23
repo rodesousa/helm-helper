@@ -18,7 +18,7 @@ jobs:
           tags: |
             type=semver,pattern={{version}}
             type=ref,event=branch
-            type=sha,enable=true,prefix={{branch}},suffix=,format=short
+            
       - id: docker_meta_old
         name: Docker meta
         uses: crazy-max/ghaction-docker-meta@v1
